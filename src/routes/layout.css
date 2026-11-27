@@ -29,6 +29,10 @@
 	color-scheme: dark;
 }
 
+@custom-variant narrow (@media (max-width: 279px));
+@custom-variant short (@media (max-height: 239px));
+@custom-variant tiny (@media (max-height: 139px), (max-width: 179px));
+
 @theme inline {
 	--color-paper: var(--p-bg);
 	--color-card: var(--p-card);

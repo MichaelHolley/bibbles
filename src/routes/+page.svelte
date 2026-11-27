@@ -25,7 +25,7 @@
 		const target = event.target as HTMLElement;
 		if (target.closest('input, button, textarea, select')) return;
 		event.preventDefault();
-		timer.toggle();
+		pip.toggleTimer();
 	}
 </script>
 
@@ -88,14 +88,25 @@
 				{/if}
 			</div>
 
-			<TimerControls />
+			<TimerControls ontoggle={() => pip.toggleTimer()} />
 
 			{#if pip.supported}
-				<div class="mt-8 flex justify-center border-t border-line pt-6">
+				<div
+					class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-line pt-6"
+				>
 					<button class="btn btn-quiet" onclick={() => (pip.window ? pip.close() : pip.open())}>
 						<Icon name="popout" class="size-4" />
 						{pip.window ? 'Close floating timer' : 'Float over other tabs'}
 					</button>
+					<label class="flex min-h-11 cursor-pointer items-center gap-2.5 text-muted">
+						<input
+							type="checkbox"
+							class="size-4 accent-accent"
+							checked={pip.autoFloat}
+							onchange={(e) => pip.setAutoFloat(e.currentTarget.checked)}
+						/>
+						Float when started
+					</label>
 				</div>
 			{/if}
 		</section>

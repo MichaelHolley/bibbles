@@ -2,10 +2,13 @@
 	import { timer } from '#lib/timer/timer.svelte.js';
 	import Icon from './Icon.svelte';
 
-	let { compact = false }: { compact?: boolean } = $props();
+	let {
+		compact = false,
+		ontoggle = () => timer.toggle()
+	}: { compact?: boolean; ontoggle?: () => void } = $props();
 </script>
 
-<div class="flex items-center justify-center gap-3">
+<div class="flex shrink-0 items-center justify-center gap-3 narrow:gap-2">
 	{#if !compact}
 		<button
 			class="btn btn-quiet size-12 px-0"
@@ -17,14 +20,20 @@
 		</button>
 	{/if}
 	<button
-		class={['btn btn-primary', compact ? 'min-w-28' : 'min-h-14 min-w-40 text-lg']}
-		onclick={() => timer.toggle()}
+		class={[
+			'btn btn-primary',
+			compact ? 'min-w-28 narrow:size-11 narrow:min-w-0 narrow:px-0' : 'min-h-14 min-w-40 text-lg'
+		]}
+		onclick={ontoggle}
+		aria-label={timer.running ? 'Pause' : timer.fresh ? 'Start' : 'Resume'}
 	>
 		<Icon name={timer.running ? 'pause' : 'play'} />
-		{timer.running ? 'Pause' : timer.fresh ? 'Start' : 'Resume'}
+		<span class={[compact && 'narrow:hidden']} aria-hidden="true">
+			{timer.running ? 'Pause' : timer.fresh ? 'Start' : 'Resume'}
+		</span>
 	</button>
 	<button
-		class={['btn btn-quiet px-0', compact ? 'size-11' : 'size-12']}
+		class={['btn btn-quiet px-0', compact ? 'size-11 tiny:hidden' : 'size-12']}
 		onclick={() => timer.skip()}
 		aria-label={timer.custom ? 'Restart timer' : 'Skip to next phase'}
 	>

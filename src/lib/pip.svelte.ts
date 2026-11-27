@@ -1,9 +1,28 @@
 import { mount, unmount } from 'svelte';
+import { z } from 'zod';
 import PipTimer from '#lib/components/PipTimer.svelte';
+import { load, save } from '#lib/storage.js';
+import { timer } from '#lib/timer/timer.svelte.js';
+
+const autoFloatKey = 'bibbles:auto-float';
 
 class Pip {
 	supported = typeof window !== 'undefined' && 'documentPictureInPicture' in window;
 	window = $state<Window | null>(null);
+	autoFloat = $state(load(autoFloatKey, z.boolean(), true));
+
+	setAutoFloat(value: boolean) {
+		this.autoFloat = value;
+		save(autoFloatKey, value);
+	}
+
+	/** Must run inside a user gesture: requestWindow needs transient activation. */
+	toggleTimer() {
+		if (!timer.running && this.autoFloat && this.supported && !this.window) {
+			this.open().catch(() => {});
+		}
+		timer.toggle();
+	}
 
 	async open() {
 		if (this.window) return this.window.focus();
