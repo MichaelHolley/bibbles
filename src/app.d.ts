@@ -8,6 +8,15 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+
+	interface DocumentPictureInPicture extends EventTarget {
+		requestWindow(options?: { width?: number; height?: number }): Promise<Window>;
+		readonly window: Window | null;
+	}
+
+	interface Window {
+		documentPictureInPicture?: DocumentPictureInPicture;
+	}
 }
 
 export {};

@@ -1,1 +1,157 @@
 @import 'tailwindcss';
+
+:root,
+[data-theme='oat'] {
+	--p-bg: #f6efe4;
+	--p-card: #fcf8f2;
+	--p-surface: #ede3d3;
+	--p-ink: #3b2a1f;
+	--p-muted: #76604f;
+	--p-line: rgb(59 42 31 / 0.13);
+	--p-accent: #b4442e;
+	--p-accent-ink: #fcf8f2;
+	--p-leaf: #5f7a3c;
+	--p-shadow: 0 1px 0 rgb(59 42 31 / 0.04), 0 28px 56px -28px rgb(59 42 31 / 0.28);
+	color-scheme: light;
+}
+
+[data-theme='ember'] {
+	--p-bg: #241a15;
+	--p-card: #2f241d;
+	--p-surface: #3b2e25;
+	--p-ink: #f3e8da;
+	--p-muted: #bba897;
+	--p-line: rgb(243 232 218 / 0.12);
+	--p-accent: #e8866b;
+	--p-accent-ink: #241a15;
+	--p-leaf: #a3b97f;
+	--p-shadow: 0 1px 0 rgb(0 0 0 / 0.2), 0 28px 56px -28px rgb(0 0 0 / 0.6);
+	color-scheme: dark;
+}
+
+@theme inline {
+	--color-paper: var(--p-bg);
+	--color-card: var(--p-card);
+	--color-surface: var(--p-surface);
+	--color-ink: var(--p-ink);
+	--color-muted: var(--p-muted);
+	--color-line: var(--p-line);
+	--color-accent: var(--p-accent);
+	--color-accent-ink: var(--p-accent-ink);
+	--color-leaf: var(--p-leaf);
+	--shadow-cozy: var(--p-shadow);
+	--font-display: 'Bricolage Grotesque', ui-rounded, system-ui, sans-serif;
+	--font-sans: 'Figtree', system-ui, sans-serif;
+	--ease-cozy: cubic-bezier(0.2, 0.8, 0.2, 1);
+	--ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+	html {
+		background: var(--color-paper);
+		color: var(--color-ink);
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		transition: background-color 300ms var(--ease-cozy);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 3px;
+	}
+}
+
+@layer components {
+	.btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		min-height: 44px;
+		padding-inline: 1.25rem;
+		border-radius: 999px;
+		font-weight: 500;
+		font-size: 1rem;
+		cursor: pointer;
+		transition:
+			transform 120ms var(--ease-cozy),
+			background-color 120ms var(--ease-cozy),
+			border-color 120ms var(--ease-cozy);
+	}
+
+	.btn-primary {
+		background: var(--color-accent);
+		color: var(--color-accent-ink);
+	}
+
+	.btn-quiet {
+		background: var(--color-surface);
+		color: var(--color-ink);
+	}
+
+	.btn:active {
+		transform: translateY(1px) scale(0.985);
+		transition-duration: 90ms;
+	}
+
+	.btn:disabled {
+		opacity: 0.45;
+		cursor: default;
+		pointer-events: none;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.btn:hover {
+			transform: translateY(-1px);
+			transition-duration: 150ms;
+		}
+		.btn:active {
+			transform: translateY(1px) scale(0.985);
+		}
+		.btn-primary:hover {
+			background: color-mix(in oklab, var(--color-accent) 86%, var(--color-ink));
+		}
+		.btn-quiet:hover {
+			background: color-mix(in oklab, var(--color-surface) 86%, var(--color-ink));
+		}
+	}
+
+	.field {
+		min-height: 44px;
+		width: 100%;
+		border-radius: 14px;
+		border: 1px solid var(--color-line);
+		background: var(--color-paper);
+		padding-inline: 0.875rem;
+		color: var(--color-ink);
+		transition:
+			border-color 140ms var(--ease-cozy),
+			box-shadow 140ms var(--ease-cozy);
+	}
+
+	.field:focus {
+		outline: none;
+		border-color: var(--color-accent);
+		box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 22%, transparent);
+	}
+
+	.enter {
+		animation: enter 700ms var(--ease-enter) both;
+	}
+}
+
+@keyframes enter {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation: none !important;
+		transition-duration: 0ms !important;
+	}
+}
